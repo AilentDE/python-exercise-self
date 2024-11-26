@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:16.3
+    comtainern_name: postgresdb
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: rootpassword
+      POSTGRES_DB: postgres
+    # volumes:
+    # - ./data/db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "root"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+  dbadmin:
+    image: adminer
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - 8080:8080
+
+  redis:
+    image: redis:7.2.5
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    # volumes:
+    #   - ./data/redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      timeout: 30s
+      retries: 5
+    command: redis-server  --requirepass rootpassword
+# psql --username "root" --dbname "postgres" --password
