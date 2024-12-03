@@ -1,0 +1,6 @@
+[flake8]
+extend-ignore = D100, D101, D102, D103, D105, DCO010, CFQ004
+max-line-length = 120
+max-function-length = 180
+max-parameters-amount = 5
+exclude = .git, __pycache__, build, dist, venv, check-venv
