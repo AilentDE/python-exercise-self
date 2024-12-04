@@ -73,7 +73,7 @@ async def get_messages(
         )
     except Exception as e:
         logger.error(f"Error getting messages: {e}")
-        return (None, Exception("Error occurred while getting messages"))
+        return ([], Exception("Error occurred while getting messages"))
 
 
 async def insert_record(session: AsyncSession, user_id: str, message_id: str) -> tuple[bool, Exception | None]:
@@ -192,4 +192,4 @@ async def get_history(
         )
     except Exception as e:
         logger.error(f"Error getting history: {e}")
-        return (None, Exception("Error occurred while getting history"))
+        return ([], Exception("Error occurred while getting history"))
