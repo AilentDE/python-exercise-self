@@ -23,5 +23,11 @@ func main() {
 	routes.SubscribeRouter(server)
 	routes.MessageRouter(server)
 
+	server.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "Hello World",
+		})
+	})
+
 	server.Run(":8000")
 }
