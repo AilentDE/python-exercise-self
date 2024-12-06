@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"errors"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -9,6 +11,8 @@ import (
 
 var ALGORITHM = os.Getenv("ALGORITHM")
 var SECRET_KEY = os.Getenv("SECRET_KEY")
+
+const BEARER_SCHEMA = "Bearer"
 
 type AuthPayload struct {
 	Id       string `json:"id"`
@@ -26,8 +30,14 @@ func (payload *AuthPayload) CreateAccessToken() (string, error) {
 	return token.SignedString([]byte(SECRET_KEY))
 }
 
-func DecideAccessToken(token string) (AuthPayload, error) {
-	parsedToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+func DecideAccessToken(token *string) (AuthPayload, error) {
+	if !strings.HasPrefix(*token, BEARER_SCHEMA) {
+		return AuthPayload{}, errors.New("token format is invalid: missing Bearer prefix")
+	}
+
+	*token = strings.TrimPrefix(*token, BEARER_SCHEMA+" ")
+	parsedToken, err := jwt.Parse(*token, func(token *jwt.Token) (interface{}, error) {
+
 		_, ok := token.Method.(*jwt.SigningMethodHMAC)
 		if !ok {
 			return nil, jwt.ErrSignatureInvalid

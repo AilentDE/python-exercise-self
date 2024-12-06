@@ -7,6 +7,7 @@ import (
 
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm/clause"
 )
 
 type User struct {
@@ -19,8 +20,8 @@ type User struct {
 
 type UserSubscription struct {
 	ID       uuid.UUID `gorm:"type:uuid;primaryKey;default:uuid_generate_v4()"`
-	UserID   uuid.UUID `gorm:"type:uuid;not null"`
-	AuthorID uuid.UUID `gorm:"type:uuid;not null"`
+	UserID   uuid.UUID `gorm:"type:uuid;not null;uniqueIndex:idx_user_author"`
+	AuthorID uuid.UUID `gorm:"type:uuid;not null;uniqueIndex:idx_user_author"`
 	User     User      `gorm:"foreignKey:UserID;constraint:OnDelete:SET NULL"`
 	Author   User      `gorm:"foreignKey:AuthorID;constraint:OnDelete:SET NULL"`
 	MixinTime
@@ -66,4 +67,23 @@ func (u *User) GetAccessToken() (string, error) {
 		return "", err
 	}
 	return token, nil
+}
+
+func (us *UserSubscription) Create() error {
+	err := config.DB.Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "user_id"}, {Name: "author_id"}},
+		DoUpdates: clause.AssignmentColumns([]string{"updated_at"}),
+	}).Create(us).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (us *UserSubscription) Delete() error {
+	err := config.DB.Where("user_id = ? AND author_id = ?", us.UserID, us.AuthorID).Delete(us).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }

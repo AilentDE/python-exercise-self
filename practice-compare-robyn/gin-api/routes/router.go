@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"compare-with-robyn/logic"
+	"compare-with-robyn/middlewares"
 )
 
 func AuthRouter(server *gin.Engine) {
@@ -14,8 +15,9 @@ func AuthRouter(server *gin.Engine) {
 
 func SubscribeRouter(server *gin.Engine) {
 	subscribeRouter := server.Group("/subscribe")
-	subscribeRouter.POST("/:userId/join", func(c *gin.Context) {})
-	subscribeRouter.POST("/:userId/withdraw", func(c *gin.Context) {})
+	subscribeRouter.Use(middlewares.RequireAuthenticator)
+	subscribeRouter.POST("/:userId/join", logic.SubscribeUser)
+	subscribeRouter.POST("/:userId/withdraw", logic.UnsubscribeUser)
 }
 
 func MessageRouter(server *gin.Engine) {
