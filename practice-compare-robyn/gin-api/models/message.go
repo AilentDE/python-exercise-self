@@ -3,9 +3,10 @@ package models
 import (
 	"compare-with-robyn/config"
 	"errors"
-	"fmt"
+	"log"
 
 	"github.com/google/uuid"
+	"gorm.io/gorm/clause"
 )
 
 type MessagePremission struct {
@@ -107,9 +108,32 @@ func (m *Message) All(userId string, skip int, limit int) ([]struct {
 			return nil, err
 		}
 	}
-	for _, message := range results {
-		fmt.Println("message", message.Message)
-		fmt.Println("user", message.User)
+
+	return results, nil
+}
+
+func (rh *ReadHistory) Create() {
+	err := config.DB.Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "user_id"}, {Name: "message_id"}},
+		DoUpdates: clause.AssignmentColumns([]string{"updated_at"}),
+	}).Create(rh).Error
+	if err != nil {
+		log.Println("Failed to create read history", err)
 	}
+}
+
+func ListHistory(userId string, skip int, limit int) ([]struct {
+	Message
+	User
+}, error) {
+	var results []struct {
+		Message
+		User
+	}
+	err := config.DB.Model(&ReadHistory{}).Select("messages.*, users.*").Joins("JOIN messages ON read_histories.message_id = messages.id").Joins("JOIN users ON messages.author_id = users.id").Where("read_histories.user_id = ?", uuid.MustParse(userId)).Offset(skip).Limit(limit).Order("read_histories.updated_at desc").Find(&results).Error
+	if err != nil {
+		return nil, err
+	}
+
 	return results, nil
 }

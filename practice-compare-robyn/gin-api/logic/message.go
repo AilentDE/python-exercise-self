@@ -115,6 +115,14 @@ func GetMessage(ctx *gin.Context) {
 		return
 	}
 
+	if userId != "" {
+		record := models.ReadHistory{
+			UserID:    uuid.MustParse(userId),
+			MessageID: parsedMessageId,
+		}
+		go record.Create()
+	}
+
 	outputMessage := messageOutput{
 		ID: foundMessage.ID.String(),
 		Author: userOutput{
@@ -157,4 +165,31 @@ func ListMessages(ctx *gin.Context) {
 		})
 	}
 	ctx.JSON(http.StatusOK, schema.BaseResponseBody("List messages successfully", true, outputMessages, nil))
+}
+
+func SearchHistory(ctx *gin.Context) {
+	userId := ctx.GetString("userId")
+	var err error
+
+	foundRecords, err := models.ListHistory(userId, 0, 10)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, schema.BaseResponseBody(err.Error(), false, nil, nil))
+		return
+	}
+
+	outputRecords := make([]messageList, 0, 10)
+	for _, r := range foundRecords {
+		outputRecords = append(outputRecords, messageList{
+			ID: r.Message.ID.String(),
+			Author: userOutput{
+				ID:       r.User.ID.String(),
+				Username: r.User.UserName,
+				Email:    r.User.Email,
+			},
+			Title:     r.Message.Title,
+			CreatedAt: r.Message.CreatedAt.UTC().Format("2006-01-02T15:04:05.999999999Z"),
+			UpdatedAt: r.Message.UpdatedAt.UTC().Format("2006-01-02T15:04:05.999999999Z"),
+		})
+	}
+	ctx.JSON(http.StatusOK, schema.BaseResponseBody("Search history successfully", true, outputRecords, nil))
 }

@@ -32,5 +32,5 @@ func MessageRouter(server *gin.Engine) {
 	messagesRouter.GET("/", logic.ListMessages)
 	messagesRouter.GET("/auth", logic.ListMessages)
 
-	server.GET("/history", middlewares.RequireAuthenticator, func(c *gin.Context) {})
+	server.GET("/history", middlewares.RequireAuthenticator, logic.SearchHistory)
 }
