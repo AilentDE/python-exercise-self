@@ -3,6 +3,7 @@ package models
 import (
 	"compare-with-robyn/config"
 	"errors"
+	"fmt"
 
 	"github.com/google/uuid"
 )
@@ -82,4 +83,33 @@ func (m *Message) Find(userId string) (Message, User, error) {
 		}
 		return subResult.Message, subResult.User, nil
 	}
+}
+
+func (m *Message) All(userId string, skip int, limit int) ([]struct {
+	Message
+	User
+}, error) {
+	var results []struct {
+		Message
+		User
+	}
+	var searchPremission = []uint8{0, 1}
+
+	stmt := config.DB.Model(m).Select("messages.*, users.*").Joins("JOIN users ON messages.author_id = users.id").Offset(skip).Limit(limit).Order("messages.created_at desc")
+	if userId != "" {
+		err := stmt.Where("messages.permission_level IN (?) OR messages.author_id = ?", searchPremission, uuid.MustParse(userId)).Find(&results).Error
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		err := stmt.Where("messages.permission_level IN (?)", searchPremission).Find(&results).Error
+		if err != nil {
+			return nil, err
+		}
+	}
+	for _, message := range results {
+		fmt.Println("message", message.Message)
+		fmt.Println("user", message.User)
+	}
+	return results, nil
 }

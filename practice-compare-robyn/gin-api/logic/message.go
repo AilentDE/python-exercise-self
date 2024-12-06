@@ -37,6 +37,14 @@ type messageOutput struct {
 	UpdatedAt       string     `json:"updatedAt"`
 }
 
+type messageList struct {
+	ID        string     `json:"id"`
+	Author    userOutput `json:"author"`
+	Title     string     `json:"title"`
+	CreatedAt string     `json:"createdAt"`
+	UpdatedAt string     `json:"updatedAt"`
+}
+
 func CreateMessage(ctx *gin.Context) {
 	var message models.Message
 	var err error
@@ -121,4 +129,32 @@ func GetMessage(ctx *gin.Context) {
 		UpdatedAt:       foundMessage.UpdatedAt.UTC().Format("2006-01-02T15:04:05.999999999Z"),
 	}
 	ctx.JSON(http.StatusOK, schema.BaseResponseBody("Get message successfully", true, outputMessage, nil))
+}
+
+func ListMessages(ctx *gin.Context) {
+	userId := ctx.GetString("userId")
+	var err error
+
+	message := models.Message{}
+	foundMessages, err := message.All(userId, 0, 10)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, schema.BaseResponseBody(err.Error(), false, nil, nil))
+		return
+	}
+
+	outputMessages := make([]messageList, 0, 10)
+	for _, m := range foundMessages {
+		outputMessages = append(outputMessages, messageList{
+			ID: m.Message.ID.String(),
+			Author: userOutput{
+				ID:       m.User.ID.String(),
+				Username: m.User.UserName,
+				Email:    m.User.Email,
+			},
+			Title:     m.Message.Title,
+			CreatedAt: m.Message.CreatedAt.UTC().Format("2006-01-02T15:04:05.999999999Z"),
+			UpdatedAt: m.Message.UpdatedAt.UTC().Format("2006-01-02T15:04:05.999999999Z"),
+		})
+	}
+	ctx.JSON(http.StatusOK, schema.BaseResponseBody("List messages successfully", true, outputMessages, nil))
 }

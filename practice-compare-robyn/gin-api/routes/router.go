@@ -28,9 +28,9 @@ func MessageRouter(server *gin.Engine) {
 	messageRouter.GET("/:messageId/auth", middlewares.OptionAuthenticator, logic.GetMessage)
 
 	messagesRouter := server.Group("/messages")
-	messagesRouter.Use(middlewares.RequireAuthenticator)
-	messagesRouter.GET("/", func(c *gin.Context) {})
-	messagesRouter.GET("/auth", func(c *gin.Context) {})
+	messagesRouter.Use(middlewares.OptionAuthenticator)
+	messagesRouter.GET("/", logic.ListMessages)
+	messagesRouter.GET("/auth", logic.ListMessages)
 
 	server.GET("/history", middlewares.RequireAuthenticator, func(c *gin.Context) {})
 }
