@@ -1,6 +1,10 @@
 package models
 
-import "github.com/google/uuid"
+import (
+	"compare-with-robyn/config"
+
+	"github.com/google/uuid"
+)
 
 type MessagePremission struct {
 	ID          uuid.UUID `gorm:"type:uuid;primaryKey;default:uuid_generate_v4()"`
@@ -13,9 +17,9 @@ type Message struct {
 	AuthorID          uuid.UUID `gorm:"type:uuid;not null"`
 	Title             string
 	Content           string
-	PremissionLevel   uint8             `gorm:"not null"`
+	PermissionLevel   uint8             `gorm:"not null" json:"permission_level"`
 	User              User              `gorm:"foreignKey:AuthorID;constraint:OnDelete:SET NULL"`
-	MessagePremission MessagePremission `gorm:"foreignKey:PremissionLevel"`
+	MessagePremission MessagePremission `gorm:"foreignKey:PermissionLevel;references:Level"`
 	MixinTime
 }
 
@@ -34,4 +38,12 @@ func BasePremission() []MessagePremission {
 		{Level: 2, Description: "Protected"},
 		{Level: 3, Description: "Private"},
 	}
+}
+
+func (m *Message) Create() error {
+	return config.DB.Create(m).Error
+}
+
+func (m *Message) Delete() error {
+	return config.DB.Where("author_id = ?", m.AuthorID).Delete(m).Error
 }

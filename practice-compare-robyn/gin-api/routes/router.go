@@ -22,14 +22,15 @@ func SubscribeRouter(server *gin.Engine) {
 
 func MessageRouter(server *gin.Engine) {
 	messageRouter := server.Group("/message")
-	messageRouter.POST("/create", func(c *gin.Context) {})
-	messageRouter.DELETE("/:messageId/delete", func(c *gin.Context) {})
-	messageRouter.GET("/:messageId", func(c *gin.Context) {})
-	messageRouter.GET("/:messageId/auth", func(c *gin.Context) {})
+	messageRouter.POST("/create", middlewares.RequireAuthenticator, logic.CreateMessage)
+	messageRouter.DELETE("/:messageId/delete", middlewares.RequireAuthenticator, logic.DeleteMessage)
+	messageRouter.GET("/:messageId", middlewares.OptionAuthenticator, func(c *gin.Context) {})
+	messageRouter.GET("/:messageId/auth", middlewares.OptionAuthenticator, func(c *gin.Context) {})
 
 	messagesRouter := server.Group("/messages")
+	messagesRouter.Use(middlewares.RequireAuthenticator)
 	messagesRouter.GET("/", func(c *gin.Context) {})
 	messagesRouter.GET("/auth", func(c *gin.Context) {})
 
-	server.GET("/history", func(c *gin.Context) {})
+	server.GET("/history", middlewares.RequireAuthenticator, func(c *gin.Context) {})
 }
