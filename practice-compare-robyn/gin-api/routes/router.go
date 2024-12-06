@@ -24,8 +24,8 @@ func MessageRouter(server *gin.Engine) {
 	messageRouter := server.Group("/message")
 	messageRouter.POST("/create", middlewares.RequireAuthenticator, logic.CreateMessage)
 	messageRouter.DELETE("/:messageId/delete", middlewares.RequireAuthenticator, logic.DeleteMessage)
-	messageRouter.GET("/:messageId", middlewares.OptionAuthenticator, func(c *gin.Context) {})
-	messageRouter.GET("/:messageId/auth", middlewares.OptionAuthenticator, func(c *gin.Context) {})
+	messageRouter.GET("/:messageId", middlewares.OptionAuthenticator, logic.GetMessage)
+	messageRouter.GET("/:messageId/auth", middlewares.OptionAuthenticator, logic.GetMessage)
 
 	messagesRouter := server.Group("/messages")
 	messagesRouter.Use(middlewares.RequireAuthenticator)

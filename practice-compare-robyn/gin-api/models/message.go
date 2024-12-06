@@ -2,6 +2,7 @@ package models
 
 import (
 	"compare-with-robyn/config"
+	"errors"
 
 	"github.com/google/uuid"
 )
@@ -46,4 +47,39 @@ func (m *Message) Create() error {
 
 func (m *Message) Delete() error {
 	return config.DB.Where("author_id = ?", m.AuthorID).Delete(m).Error
+}
+
+func (m *Message) Find(userId string) (Message, User, error) {
+
+	if userId == "" {
+		var result struct {
+			Message
+			User
+		}
+
+		err := config.DB.Model(m).Select("messages.*, users.*").Joins("JOIN users ON messages.author_id = users.id").Where("messages.id = ? AND messages.permission_level = ?", m.ID, 0).First(&result).Error
+		if err != nil {
+			return Message{}, User{}, err
+		}
+
+		return result.Message, result.User, nil
+	} else {
+		var subResult struct {
+			Message
+			User
+			SubscriptionID *uuid.UUID `gorm:"column:subscription_id"`
+		}
+
+		err := config.DB.Model(m).Select("messages.*, users.*, user_subscriptions.id AS subscription_id").Joins("JOIN users ON messages.author_id = users.id").Joins("LEFT JOIN user_subscriptions ON user_subscriptions.author_id = messages.author_id AND user_subscriptions.user_id = ?", uuid.MustParse(userId)).Where("messages.id = ?", m.ID).First(&subResult).Error
+		if err != nil {
+			return Message{}, User{}, err
+		}
+
+		if subResult.Message.AuthorID == uuid.MustParse(userId) {
+			return subResult.Message, subResult.User, nil
+		} else if subResult.Message.PermissionLevel == 2 || (subResult.Message.PermissionLevel == 1 && subResult.SubscriptionID == nil) {
+			return Message{}, User{}, errors.New("Premission denied")
+		}
+		return subResult.Message, subResult.User, nil
+	}
 }
