@@ -14,10 +14,19 @@ if api_name not in ('fast', 'robyn', 'gin'):
     logger.error("Could not support this api type.")
     sys.exit(1)
 
-# tester = TestHandler(api_name)
-# tester.home()
-
+# Prepare
 user1 = UserGenerator()
 message1 = user1.create_message()
-print(message1)
-user1.delete_message(message1)
+
+user2 = UserGenerator()
+message2 = user2.create_message()
+user2.subscribe_user(user1.user_id)
+
+
+# Test
+tester = TestHandler(api_name)
+tester.home()
+
+tester.visit_message(user2.access_token, message1)
+
+tester.delete_message(user1.access_token, message1)
