@@ -72,11 +72,13 @@ class UserGenerator:
     email = ""
     access_token = ""
     user_id = ""
+    _api_type = ""
 
-    def __init__(self) -> None:
+    def __init__(self, api_name) -> None:
         self.username = self.fake.user_name()
         self.password = self.fake.password()
         self.email = self.fake.email()
+        self._api_type = api_name
 
         r = requests.post(
             self._url + '/auth/register',
@@ -93,8 +95,12 @@ class UserGenerator:
             json={"title": title, "content": content, "permission_level": 1},
             headers={"Authorization": "Bearer " + self.access_token},
         )
-        self.user_id = r.json()["data"]["authorId"]
-        return r.json()["data"]["id"]
+        if self._api_type == "robyn":
+            self.user_id = r.json()["data"]["message"]["authorId"]
+            return r.json()["data"]["message"]["id"]
+        else:
+            self.user_id = r.json()["data"]["authorId"]
+            return r.json()["data"]["id"]
 
     def delete_message(self, message_id: str) -> None:
         _ = requests.delete(

@@ -15,10 +15,10 @@ if api_name not in ('fast', 'robyn', 'gin'):
     sys.exit(1)
 
 # Prepare
-user1 = UserGenerator()
+user1 = UserGenerator(api_name)
 message1 = user1.create_message()
 
-user2 = UserGenerator()
+user2 = UserGenerator(api_name)
 message2 = user2.create_message()
 user2.subscribe_user(user1.user_id)
 
