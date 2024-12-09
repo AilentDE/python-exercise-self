@@ -17,6 +17,7 @@ func main() {
 
 	config.InitDB()
 	db_method.CreateTables()
+	db_method.CreateBasePremission()
 
 	server := gin.Default()
 	routes.AuthRouter(server)

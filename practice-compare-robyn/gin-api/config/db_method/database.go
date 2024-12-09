@@ -3,6 +3,8 @@ package db_method
 import (
 	"compare-with-robyn/config"
 	"compare-with-robyn/models"
+
+	"gorm.io/gorm/clause"
 )
 
 func CreateTables() {
@@ -29,4 +31,13 @@ func CreateTables() {
 	config.DB.AutoMigrate(&models.MessagePremission{})
 	config.DB.AutoMigrate(&models.UserSubscription{})
 	config.DB.AutoMigrate(&models.User{})
+}
+
+func CreateBasePremission() {
+	for _, p := range models.BasePremission() {
+		config.DB.Clauses(clause.OnConflict{
+			Columns:   []clause.Column{{Name: "level"}},
+			DoNothing: true,
+		}).Create(&p)
+	}
 }
