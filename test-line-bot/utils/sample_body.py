@@ -17,7 +17,7 @@ fake_rich_menu = {
             "action": {
                 "type": "uri",
                 "label": "Tap area a",
-                "uri": "https://developers.line.biz/en/news/"
+                "uri": "https://developers.line.biz/en/news/?openExternalBrowser=1"
             }
         },
         {
