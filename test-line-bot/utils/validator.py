@@ -2,7 +2,8 @@ import sys
 import hmac
 import hashlib
 import base64
-from config.setting import ChannelSetting
+
+from config.setting import LineMessageSetting
 
 PY3 = sys.version_info[0] == 3
 
@@ -66,6 +67,6 @@ def check_signature(body: str, signature: str) -> bool:
     Returns:
         bool: The result of checking the signature.
     """
-    gen_signature = hmac.new(ChannelSetting.secret.encode("utf-8"), body.encode("utf-8"), hashlib.sha256).digest()
+    gen_signature = hmac.new(LineMessageSetting.secret.encode("utf-8"), body.encode("utf-8"), hashlib.sha256).digest()
 
     return compare_digest(signature.encode("utf-8"), base64.b64encode(gen_signature))
