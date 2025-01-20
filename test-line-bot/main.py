@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
+import sys
 
 from config.state import line_bot_state
 from config.database import create_all
@@ -24,4 +25,4 @@ app.include_router(rich_menu_router, prefix="/rich_menu", tags=["rich_menu"])
 
 @app.get("/")
 async def root():
-    return {"Hello": "World"}
+    return {"Python": sys.version}

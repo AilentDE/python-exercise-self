@@ -63,6 +63,7 @@ ul {
 
 li {
   list-style-type: none;
-  width: fit-content;
-  text-wrap: pretty;
+  width: 100%;
+  padding-bottom: 0.5em;
+  word-wrap: break-word;
 }

@@ -56,6 +56,14 @@ class RichmenuSample:
                 "chatBarText": "選單",
                 "areas": [
                     {
+                        "bounds": {"x": 0, "y": 200, "width": 2500, "height": 1486},
+                        "action": {
+                            "type": "uri",
+                            "label": "liff",
+                            "uri": "https://liff.line.me/2006790295-j2GxEnYX",
+                        },
+                    },
+                    {
                         "bounds": {"x": 0, "y": 0, "width": 800, "height": 200},
                         "action": {
                             "type": "richmenuswitch",
@@ -145,6 +153,14 @@ class RichmenuSample:
                 "name": "richmenu-without-login-tab-c",
                 "chatBarText": "選單",
                 "areas": [
+                    {
+                        "bounds": {"x": 0, "y": 200, "width": 2500, "height": 1486},
+                        "action": {
+                            "type": "uri",
+                            "label": "liff",
+                            "uri": "https://liff.line.me/2006790295-j2GxEnYX",
+                        },
+                    },
                     {
                         "bounds": {"x": 0, "y": 0, "width": 800, "height": 200},
                         "action": {
