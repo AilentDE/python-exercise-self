@@ -89,7 +89,7 @@ class RichmenuSample:
                             "type": "postback",
                             "label": "login",
                             "data": "action=login",
-                            "displayText": "綁定和泰帳號",
+                            "displayText": "我要登入",
                             "inputOption": "closeRichMenu",
                         },
                     },

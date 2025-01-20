@@ -15,5 +15,13 @@ class LineMessageSetting(StrEnum):
         )
 
 
+class LineLoginSetting(StrEnum):
+    cid = os.getenv("LINE_LOGIN_ID")
+    secret = os.getenv("LINE_LOGIN_SECRET")
+    redirect_uri = os.getenv("LINE_LOGIN_REDIRECT_URI")
+    if secret is None or redirect_uri is None:
+        raise ValueError("Please set environment variables: LINE_LOGIN_CHANNEL_SECRET, LINE_LOGIN_REDIRECT_URI")
+
+
 class DatabaseSetting(StrEnum):
     host = os.getenv("DATABASE_HOST")

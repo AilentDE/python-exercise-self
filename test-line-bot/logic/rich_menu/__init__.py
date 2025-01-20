@@ -98,7 +98,7 @@ class SampleRichMenu(RichMenuLogic):
         for menu_type, menu in richmenu_schemas:
             for tab, schema in menu.items():
                 richmenu_id = self.create_richmenu(schema)
-                if menu_type == "login" and tab == "tab_b":
+                if menu_type == "without_login" and tab == "tab_b":
                     default_richmenu_id = richmenu_id
                 self.upload_image(richmenu_id, RichmenuSample.asset_path[0][menu_type][tab])
                 self.create_richmenu_alias(richmenu_id, schema["name"])
