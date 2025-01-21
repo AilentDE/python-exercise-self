@@ -1,3 +1,6 @@
+from config.setting import LineLiffSetting
+
+
 class RichmenuSample:
     login = (
         {
@@ -158,7 +161,7 @@ class RichmenuSample:
                         "action": {
                             "type": "uri",
                             "label": "liff",
-                            "uri": "https://liff.line.me/2006790295-j2GxEnYX",
+                            "uri": f"https://liff.line.me/{LineLiffSetting.lid}",
                         },
                     },
                     {

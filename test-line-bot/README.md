@@ -32,6 +32,7 @@ Before running the project, you must prepare the following resources:
      LINE_LOGIN_ID=
      LINE_LOGIN_SECRET=
      LINE_LOGIN_REDIRECT_URI=
+     LINE_LIFF_ID=
      ```
    - `frontend/.env`
      ```bash

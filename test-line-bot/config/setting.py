@@ -23,5 +23,11 @@ class LineLoginSetting(StrEnum):
         raise ValueError("Please set environment variables: LINE_LOGIN_CHANNEL_SECRET, LINE_LOGIN_REDIRECT_URI")
 
 
+class LineLiffSetting(StrEnum):
+    lid = os.getenv("LINE_LIFF_ID")
+    if lid is None:
+        raise ValueError("Please set environment variables: LINE_LIFF_ID")
+
+
 class DatabaseSetting(StrEnum):
     host = os.getenv("DATABASE_HOST")
