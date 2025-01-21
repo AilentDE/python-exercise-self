@@ -59,7 +59,7 @@ const LineLiffSection = () => {
           <li>
             pictureUrl:
             <br />
-            {userInfo.pictureUrl}
+            <img src={userInfo.pictureUrl} alt="profile" />
           </li>
           <li>
             accessToken:

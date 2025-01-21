@@ -16,3 +16,13 @@ class LineWebhookEvent(BaseModel):
 
     destination: str
     events: list[dict]
+
+
+class LineLoginPayload(BaseModel):
+    """Line Auth Code Schema
+
+    Attributes:
+        code (str): The code.
+    """
+
+    code: str

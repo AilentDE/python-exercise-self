@@ -67,3 +67,8 @@ li {
   padding-bottom: 0.5em;
   word-wrap: break-word;
 }
+
+img {
+  width: 20%;
+  height: 20%;
+}
