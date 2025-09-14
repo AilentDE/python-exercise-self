@@ -1,0 +1,42 @@
+- Auto Scaling in EC2 and DynamoDB are examples of?
+  - Horizontal scaling
+  - Vertical scaling
+    - Auto Scaling in EC2 allows you to have the right number of instances to handle the application load. Auto Scaling in DynamoDB automatically adjusts read and write throughput capacity, in response to dynamically changing request volumes, with zero downtime. These are both examples of horizontal scaling.
+- AWS Trusted Advisor can provide guidance against the 6 Well-Architected pillars and architectural best practices.
+  - True
+  - False
+    - The AWS Well-Architected Tool helps you review the state of your workloads and compares them to the latest AWS architectural best practices. It is based on the 6 pillars of the Well-Architected Framework (Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization, and Sustainability). AWS Trusted Advisor is an online tool that provides you real time guidance to help you provision your resources following AWS best practices (Cost Optimization, Performance, Security, Fault Tolerance, and Service Limits).
+- Which of the following are design principles of Performance Efficiency?
+  - Go global in minutes & experiment more often
+  - Analyze and attribute expenditure & stop spending money on data center operations
+  - Make frequent, small, reversible changes & anticipate failure
+  - Automate security best practices & keep away people from data
+    - Performance Efficiency design principles include: democratize advanced technologies, go global in minutes, use serverless architecture, experiment more often, mechanical sympathy.
+- Which of the following is NOT an AWS Partner Network (APN) type?
+  - APN Technology Partners
+  - APN Services Partners
+  - APN Consulting Partners
+  - APN Training Partners
+    - This is a distractor. This type of AWS Partner Network does not exist. It is made up with words related to the AWS Partner Network.
+- Testing recovery procedures, stopping guessing capacity, and managing changes in automation are design principles of Performance Efficiency.
+  - True
+  - False
+    - Testing recovery procedures, stopping guessing capacity, and managing changes in automation are design principles of Reliability. Performance Efficiency design principles include: democratize advanced technologies, go global in minutes, use serverless architecture, experiment more often, mechanical sympathy.
+- Which AWS service is the key to Operational Excellence?
+  - CloudFormation
+  - EC2
+  - OpsWork
+  - CodeDeploy
+    - CloudFormation is a key service to Operational Excellence as it prepares, operates, and evolves, but also performs operations as code.
+- AWS Cost Explorer and AWS Trusted Advisor are services examples of which Well-Architected Framework pillar?
+  - Security
+  - Operation Excellence
+  - Cost Optimization
+  - Performance Efficiency
+    - AWS Cost Explorer and AWS Trusted Advisor are Cost Optimization services examples. It also includes AWS Budgets, Cost and Usage Reports, etc.
+- Implementing Security Groups, NACLs, KMS, or CloudTrail reflects which Well-Architected Framework Pillar?
+  - Reliability
+  - Performance Efficiency
+  - Security
+  - Cost Optimization
+    - The Security pillar includes the ability to protect information, systems, and assets while delivering business value through risk assessments and mitigation strategies.
